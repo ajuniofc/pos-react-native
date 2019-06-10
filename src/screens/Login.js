@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import {KeyboardAvoidingView, View, Image, TextInput, Button, Text, StyleSheet, SafeAreaView} from 'react-native'
+import {KeyboardAvoidingView, View, Image, TextInput, Button, Text, StyleSheet, Alert} from 'react-native'
+import { signInOnFirebaseAsync } from '../services/FirebaseApi';
 
 const img = require('../assets/TodoList.png')
 
@@ -35,7 +36,7 @@ export default class Login extends Component {
                                onChangeText={(password) => this.setState({password})} ></TextInput>
 
                     <Button title='Sing In'
-                            onPress={() => alert(`Email: ${this.state.email} \nPassword: ${this.state.password}`)} />
+                            onPress={() => this.signInAsync()} />
                             <View style={styles.textConteiner}>
                                 <Text>Not a menber? Let's </Text>
                                 <Text style={styles.textRegister} onPress={() => {
@@ -46,6 +47,17 @@ export default class Login extends Component {
                 </View>
             </KeyboardAvoidingView>
         )
+    }
+
+    async signInAsync() {
+        try {
+            const user = await signInOnFirebaseAsync(this.state.email,
+                this.state.password);
+            Alert.alert("User Authenticated",
+                `User ${user.email} has succesfuly been authenticated!`);
+        } catch (error) {
+            Alert.alert("Login Failed", error.message);
+        }
     }
 }
 
