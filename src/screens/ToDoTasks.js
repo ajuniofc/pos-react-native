@@ -10,7 +10,8 @@ export default class ToDoTasks extends Component {
     static navigationOptions = {
         tabBarLabel: 'To Do',
         tabBarIcon: ({ tintColor }) => (
-            <Image source={imgChecList} style={[styles.icon, { tintColor }]} /> )
+            <Image source={imgChecList}
+                   style={[styles.icon, { tintColor }]} /> )
     }
 
     state = {
@@ -25,7 +26,8 @@ export default class ToDoTasks extends Component {
         const tasksToDo = tasks.filter(t => !t.isDone);
         this.setState({
             tasks: tasksToDo
-        }); }
+        });
+    }
 
     _goToTask() {
         this.props.navigation.navigate('pageTask');
@@ -38,7 +40,7 @@ export default class ToDoTasks extends Component {
                 <TaskListView tasks={this.state.tasks} navigation={this.props.navigation}/>
 
                 <TouchableOpacity style={styles.floatButton}
-                    onPress={()=> this._goToTask()}>
+                                  onPress={()=> this._goToTask()}>
                     <Image source={imgPlus} style={styles.img} />
                 </TouchableOpacity>
             </View>

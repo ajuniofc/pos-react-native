@@ -13,6 +13,7 @@ const wrappedRoutes = () => { return (
 };
 
 AppRegistry.registerComponent(appName, () => {
+    console.disableYellowBox = true;
     initializeFirebaseApi();
     return wrappedRoutes
 });

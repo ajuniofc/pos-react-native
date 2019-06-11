@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Image, StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, View, TouchableOpacity } from 'react-native';
+import { readTasksFromFirebaseAsync } from "../services/FirebaseApi";
 import TaskListView from "../components/TaskListView";
-import {readTasksFromFirebaseAsync} from "../services/FirebaseApi";
 
 const imgDone = require('../assets/done.png');
+const imgPlus = require('../assets/add.png');
 
 export default class DoneTasks extends Component {
     static navigationOptions = {
@@ -28,10 +29,20 @@ export default class DoneTasks extends Component {
         });
     }
 
+    _goToTask() {
+        this.props.navigation.navigate('pageTask');
+    }
+
     render(){
         return (
             <View style={styles.container} >
+
                 <TaskListView tasks={this.state.tasks} navigation={this.props.navigation}/>
+
+                <TouchableOpacity style={styles.floatButton}
+                                  onPress={()=> this._goToTask()}>
+                    <Image source={imgPlus} style={styles.img} />
+                </TouchableOpacity>
             </View>
         );
     }
@@ -45,5 +56,11 @@ const styles = StyleSheet.create({ container: {
         height: 26 },
     img: {
         width: 50,
-        height: 50 }
+        height: 50
+    },
+    floatButton: {
+        position: 'absolute',
+        right: 20,
+        bottom: 20
+    }
 });
