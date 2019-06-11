@@ -17,4 +17,19 @@ export const createUserOnFirebaseAsync = async (email, password) => {
 
 export async function signInOnFirebaseAsync(email, password) {
     const user = await firebase.auth().signInWithEmailAndPassword(email, password);
-    return user; }
+    return user;
+}
+
+export const currentFirebaseUser = () => {
+    return new Promise((resolve, reject) => {
+        var unsubscribe = firebase
+            .auth()
+            .onAuthStateChanged((user) => {
+                    resolve(user);
+                }, (error) => {
+                    reject(error);
+                }, () => {
+                    unsubscribe();
+            });
+    });
+}

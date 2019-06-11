@@ -6,67 +6,54 @@
  * @flow
  */
 
-import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, SafeAreaView} from 'react-native';
+import { StackActions, NavigationActions } from 'react-navigation';
+import { currentFirebaseUser } from '../services/FirebaseApi';
+import React, { Component } from 'react';
+import { View, ActivityIndicator, StyleSheet } from 'react-native';
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+export default class App extends Component {
 
-type Props = {};
-export default class App extends Component<Props> {
+  static navigationOptions = {
+    header: null
+  };
+
+  async componentDidMount() {
+    let resetNavigation = StackActions.reset({
+      index: 0,
+      actions: [NavigationActions.navigate({ routeName: 'pageLogin'})]
+    });
+
+    try {
+      const user = await currentFirebaseUser();
+      if (user) {
+        resetNavigation = StackActions.reset({
+          index: 0,
+          actions: [NavigationActions.navigate({
+            routeName: 'pageTaskList'
+          })]
+        });
+        this.props.navigation.dispatch(resetNavigation);
+      }
+      this.props.navigation.dispatch(resetNavigation);
+    } catch (error) {
+      this.props.navigation.dispatch(resetNavigation);
+    }
+  }
+
   render() {
     return (
-
-      <SafeAreaView ref='main' style={styles.container}>
-
-        <View ref='first' style={styles.first}>
-          <View style={styles.subView} /> 
-          <View style={styles.subView} /> 
-          <View style={styles.subView} />
-        </View>
-
-        <View ref='second' style={styles.second}> 
-          <View style={styles.subView} />
-          <View style={styles.subView} />
-          <View style={styles.subView} />
-        </View>
-
-      </SafeAreaView>
-      
-    );
+        <View style={styles.container}>
+          <ActivityIndicator style={styles.loading} />
+        </View> );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column' 
-  },
-  first: {
-    flex: 1,
-    flexDirection: 'row', 
-    justifyContent: 'space-between', 
-    alignItems: 'flex-start',
-    margin: 40,
-    borderColor: 'red',
-    borderWidth: 1
-  }, 
-  second: {
-    flex: 2,
-    flexDirection: 'column', 
-    justifyContent: 'space-evenly', 
-    alignItems: 'flex-end',
-    margin: 40,
-    borderColor: 'red', 
-    borderWidth: 1
-  }, 
-  subView: {
-    height: 50,
-    width: 50, 
-    backgroundColor: 'skyblue'
-  },
+    justifyContent: 'center',
+    alignItems: 'center'
+  }, loading: {
+    width: 50,
+    height: 50 }
 });
