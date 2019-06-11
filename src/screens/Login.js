@@ -57,7 +57,7 @@ export default class Login extends Component {
             const resetNavigation = StackActions.reset({
                 index: 0,
                 actions: [NavigationActions.navigate({
-                    routeName: 'pageTasksList'
+                    routeName: 'pageTaskList'
                 })]
             });
 

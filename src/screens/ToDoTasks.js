@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Image, StyleSheet, View, TouchableOpacity } from 'react-native';
+import { readTasksFromFirebaseAsync } from '../services/FirebaseApi';
+import TaskListView from "../components/TaskListView";
 
 const imgChecList = require('../assets/checklist.png');
 const imgPlus = require('../assets/add.png');
@@ -11,6 +13,20 @@ export default class ToDoTasks extends Component {
             <Image source={imgChecList} style={[styles.icon, { tintColor }]} /> )
     }
 
+    state = {
+        tasks: []
+    }
+
+    componentDidMount() {
+        readTasksFromFirebaseAsync(this._fetchTasks.bind(this));
+    }
+
+    _fetchTasks(tasks) {
+        const tasksToDo = tasks.filter(t => !t.isDone);
+        this.setState({
+            tasks: tasksToDo
+        }); }
+
     _goToTask() {
         this.props.navigation.navigate('pageTask');
     }
@@ -18,6 +34,9 @@ export default class ToDoTasks extends Component {
     render(){
         return (
             <View style={styles.container}>
+
+                <TaskListView tasks={this.state.tasks} navigation={this.props.navigation}/>
+
                 <TouchableOpacity style={styles.floatButton}
                     onPress={()=> this._goToTask()}>
                     <Image source={imgPlus} style={styles.img} />
