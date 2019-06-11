@@ -21,7 +21,8 @@ export default class TaskListView extends Component {
             <TouchableOpacity onPress={()=> this._onClickTask(itemData.item)}>
                 <View style={styles.itemConteiner}>
                     <Text style={styles.itemTextTitle}>{itemData.item.title}</Text>
-                    <Text>{itemData.item.resume}</Text> </View>
+                    <Text>{itemData.item.resume}</Text>
+                </View>
             </TouchableOpacity>
         );
     }
